@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AeroTrack Sentinel — Pitch Hackathon ARKIV × PunaTech 2026</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  --bg: #09090b;
+  --card: #18181b;
+  --border: #27272a;
+  --text: #fafafa;
+  --text-dim: #a1a1aa;
+  --accent: #06b6d4;
+  --accent2: #22d3ee;
+  --danger: #ef4444;
+  --warn: #f59e0b;
+  --success: #10b981;
+  --glow: rgba(6,182,212,0.15);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+}
+
+.slide {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  padding: 4rem 6rem;
+  position: relative;
+  animation: fadeIn 0.5s ease;
+}
+
+.slide.active { display: flex; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.slide-number {
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.1em;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 1rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 1.5rem;
+}
+
+.badge-cyan { background: rgba(6,182,212,0.12); color: var(--accent2); border: 1px solid rgba(6,182,212,0.3); }
+.badge-red { background: rgba(239,68,68,0.12); color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
+.badge-green { background: rgba(16,185,129,0.12); color: #34d399; border: 1px solid rgba(16,185,129,0.3); }
+
+h1 {
+  font-size: 3.5rem;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  margin-bottom: 1.5rem;
+}
+
+h1 .gradient {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 50%, #67e8f9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+h2 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin-bottom: 1rem;
+}
+
+h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--accent2);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.8rem;
+}
+
+p, li {
+  font-size: 1.35rem;
+  line-height: 1.7;
+  color: var(--text-dim);
+}
+
+p strong, li strong { color: var(--text); font-weight: 600; }
+
+.emoji-icon {
+  font-size: 1.8rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  width: 100%;
+  max-width: 1100px;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  padding: 2rem;
+}
+
+.card-accent {
+  background: linear-gradient(135deg, rgba(6,182,212,0.08) 0%, rgba(6,182,212,0.02) 100%);
+  border-color: rgba(6,182,212,0.25);
+}
+
+.list-icon {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.list-icon p { margin: 0; font-size: 1.2rem; }
+.list-icon .emoji-icon { margin-top: 0.15rem; }
+
+.code-block {
+  background: #0c0c0e;
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  line-height: 1.7;
+  color: #a1a1aa;
+  overflow-x: auto;
+  width: 100%;
+  max-width: 900px;
+}
+
+.code-block .key { color: var(--accent2); }
+.code-block .str { color: #34d399; }
+.code-block .num { color: #f59e0b; }
+.code-block .comment { color: #52525b; }
+.code-block .accent { color: #c084fc; }
+
+.entity-diagram {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 1.5rem;
+  align-items: center;
+  width: 100%;
+  max-width: 1050px;
+}
+
+.entity-box {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  width: 100%;
+}
+
+.entity-box h4 {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--accent2);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.entity-box .attr {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.35rem 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+}
+
+.entity-box .attr .label { color: var(--text-dim); }
+.entity-box .attr .value { color: var(--text); }
+.entity-box .attr .value.num { color: #f59e0b; }
+.entity-box .attr .value.str { color: #34d399; }
+
+.entity-box .expires {
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(6,182,212,0.2);
+  font-size: 0.75rem;
+  color: var(--accent2);
+  text-align: center;
+  font-weight: 600;
+}
+
+.arrow-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--accent2);
+  font-size: 0.7rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+}
+
+.arrow-col .line {
+  width: 2px;
+  height: 40px;
+  background: linear-gradient(to bottom, var(--accent2), transparent);
+}
+
+.demo-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 900px;
+}
+
+.demo-step {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  padding: 1.25rem 1.5rem;
+}
+
+.demo-step .step-num {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1rem;
+  flex-shrink: 0;
+  background: rgba(6,182,212,0.15);
+  color: var(--accent2);
+  border: 1px solid rgba(6,182,212,0.3);
+}
+
+.demo-step p {
+  font-size: 1.05rem;
+  margin: 0;
+}
+
+.demo-step p strong { color: var(--accent2); }
+
+.footer-bar {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.5rem;
+}
+
+.footer-bar .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--border);
+  transition: background 0.3s, transform 0.3s;
+  cursor: pointer;
+}
+
+.footer-bar .dot.active {
+  background: var(--accent2);
+  transform: scale(1.3);
+}
+
+.nav-hint {
+  position: absolute;
+  bottom: 2rem;
+  right: 2rem;
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  opacity: 0.5;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.title-center { text-align: center; max-width: 800px; }
+.title-center h1 { margin-bottom: 1rem; }
+
+.subtitle {
+  font-size: 1.3rem;
+  color: var(--text-dim);
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.tag-row {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.tag {
+  padding: 0.4rem 1rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  background: rgba(6,182,212,0.08);
+  border: 1px solid rgba(6,182,212,0.2);
+  color: var(--accent2);
+}
+
+.tag-green { background: rgba(16,185,129,0.08); border-color: rgba(16,185,129,0.2); color: #34d399; }
+.tag-amber { background: rgba(245,158,11,0.08); border-color: rgba(245,158,11,0.2); color: #fbbf24; }
+
+.quotation {
+  font-size: 1.5rem;
+  line-height: 1.8;
+  font-weight: 500;
+  color: var(--text);
+  max-width: 900px;
+  text-align: center;
+}
+
+.quotation em {
+  color: var(--accent2);
+  font-style: normal;
+}
+
+.section-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.problem-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  width: 100%;
+  max-width: 1050px;
+  margin-top: 2rem;
+}
+
+.problem-card {
+  background: linear-gradient(135deg, rgba(239,68,68,0.06) 0%, rgba(239,68,68,0.02) 100%);
+  border: 1px solid rgba(239,68,68,0.15);
+  border-radius: 1rem;
+  padding: 1.75rem;
+  text-align: center;
+}
+
+.problem-card .icon { font-size: 2rem; margin-bottom: 0.75rem; }
+.problem-card h4 { font-size: 0.95rem; font-weight: 700; color: #f87171; margin-bottom: 0.5rem; }
+.problem-card p { font-size: 0.9rem; line-height: 1.5; color: #a1a1aa; }
+
+.solution-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  width: 100%;
+  max-width: 1050px;
+  margin-top: 1rem;
+}
+
+.sol-card {
+  background: linear-gradient(135deg, rgba(6,182,212,0.06) 0%, rgba(6,182,212,0.02) 100%);
+  border: 1px solid rgba(6,182,212,0.15);
+  border-radius: 1rem;
+  padding: 1.5rem;
+}
+
+.sol-card .icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
+.sol-card h4 { font-size: 0.9rem; font-weight: 700; color: var(--accent2); margin-bottom: 0.4rem; }
+.sol-card p { font-size: 0.85rem; line-height: 1.5; color: #a1a1aa; }
+
+.keystyle {
+  font-family: 'JetBrains Mono', monospace;
+  background: rgba(6,182,212,0.1);
+  padding: 0.15rem 0.5rem;
+  border-radius: 0.3rem;
+  font-size: 0.8rem;
+  color: var(--accent2);
+}
+
+.closing-links {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 2.5rem;
+}
+
+.closing-links a {
+  color: var(--accent2);
+  text-decoration: none;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  padding: 0.5rem 1.5rem;
+  border: 1px solid rgba(6,182,212,0.3);
+  border-radius: 0.5rem;
+  transition: background 0.2s;
+}
+
+.closing-links a:hover {
+  background: rgba(6,182,212,0.1);
+}
+
+.full-width { width: 100%; }
+</style>
+</head>
+<body>
+
+<!-- ==================== SLIDE 0 — TÍTULO ==================== -->
+<div class="slide active" id="s0">
+  <div class="slide-number">01 / 07</div>
+  <div class="section-icon">🛡️</div>
+  <div class="title-center">
+    <h1><span class="gradient">AeroTrack Sentinel</span></h1>
+    <p class="subtitle">Auditoría logística inmutable con IA<br>sobre Arkiv Testnet</p>
+  </div>
+  <div class="tag-row">
+    <span class="tag">ARKIV × PunaTech 2026</span>
+    <span class="tag tag-green">Braga Testnet</span>
+    <span class="tag tag-amber">Procedencia de IA</span>
+  </div>
+  <div class="footer-bar">
+    <div class="dot active" onclick="goTo(0)"></div>
+    <div class="dot" onclick="goTo(1)"></div>
+    <div class="dot" onclick="goTo(2)"></div>
+    <div class="dot" onclick="goTo(3)"></div>
+    <div class="dot" onclick="goTo(4)"></div>
+    <div class="dot" onclick="goTo(5)"></div>
+    <div class="dot" onclick="goTo(6)"></div>
+  </div>
+  <div class="nav-hint">→ avanza · ← retrocede</div>
+</div>
+
+<!-- ==================== SLIDE 1 — PROBLEMA ==================== -->
+<div class="slide" id="s1">
+  <div class="slide-number">02 / 07</div>
+  <div class="badge badge-red">⚠ El Problema</div>
+  <h2>Las decisiones de IA logística son cajas negras</h2>
+  <p class="quotation" style="max-width:850px; margin-bottom: 2rem;">
+    Cuando una IA de rutas genera una decisión crítica — desvío por clima, accidente, corte de ruta — <em>no hay forma de auditar</em> por qué tomó esa decisión. Los datos viven en servidores cerrados donde cualquiera puede alterarlos sin dejar rastro.
+  </p>
+  <div class="problem-grid">
+    <div class="problem-card">
+      <div class="icon">🔒</div>
+      <h4>Plataformas cerradas</h4>
+      <p>Los logs de IA se almacenan en bases de datos mutables, sin trazabilidad criptográfica.</p>
+    </div>
+    <div class="problem-card">
+      <div class="icon">🔍</div>
+      <h4>Sin atribución</h4>
+      <p>Imposible verificar quién creó cada registro o si fue modificado con posterioridad.</p>
+    </div>
+    <div class="problem-card">
+      <div class="icon">📋</div>
+      <h4>Sin auditoría</h4>
+      <p>Ante una falla operativa, no existe evidencia inmutable del razonamiento de la IA.</p>
+    </div>
+  </div>
+  <div class="footer-bar">
+    <div class="dot" onclick="goTo(0)"></div>
+    <div class="dot active" onclick="goTo(1)"></div>
+    <div class="dot" onclick="goTo(2)"></div>
+    <div class="dot" onclick="goTo(3)"></div>
+    <div class="dot" onclick="goTo(4)"></div>
+    <div class="dot" onclick="goTo(5)"></div>
+    <div class="dot" onclick="goTo(6)"></div>
+  </div>
+  <div class="nav-hint">→ avanza · ← retrocede</div>
+</div>
+
+<!-- ==================== SLIDE 2 — SOLUCIÓN ==================== -->
+<div class="slide" id="s2">
+  <div class="slide-number">03 / 07</div>
+  <div class="badge badge-green">✅ La Solución</div>
+  <h2>AeroTrack Sentinel</h2>
+  <p class="quotation" style="margin-bottom: 2rem;">
+    Un dashboard de auditoría logística que registra inmutablemente cada decisión de IA como <em>entidades en Arkiv</em>. Nadie puede alterar o eliminar un registro — cada decisión es verificable públicamente con un hash de transacción.
+  </p>
+  <div class="solution-grid">
+    <div class="sol-card">
+      <div class="icon">⛓️</div>
+      <h4>Inmutable por diseño</h4>
+      <p>Cada decisión se registra on-chain. El <span class="keystyle">$creator</span> garantiza la autoría sin posibilidad de manipulación.</p>
+    </div>
+    <div class="sol-card">
+      <div class="icon">🔢</div>
+      <h4>Atributos numéricos</h4>
+      <p><span class="keystyle">riskScore</span> como atributo tipado permite filtrar por rango (riesgo &gt; 5) directamente en la query.</p>
+    </div>
+    <div class="sol-card">
+      <div class="icon">🔗</div>
+      <h4>txHash verificable</h4>
+      <p>Cada operación genera un hash de transacción visible en el Block Explorer de Arkiv Braga.</p>
+    </div>
+    <div class="sol-card">
+      <div class="icon">🔑</div>
+      <h4>Foreign key compartida</h4>
+      <p><span class="keystyle">fleetId</span> conecta flotas con decisiones, como una FK entre entidades Arkiv.</p>
+    </div>
+  </div>
+  <div class="footer-bar">
+    <div class="dot" onclick="goTo(0)"></div>
+    <div class="dot" onclick="goTo(1)"></div>
+    <div class="dot active" onclick="goTo(2)"></div>
+    <div class="dot" onclick="goTo(3)"></div>
+    <div class="dot" onclick="goTo(4)"></div>
+    <div class="dot" onclick="goTo(5)"></div>
+    <div class="dot" onclick="goTo(6)"></div>
+  </div>
+  <div class="nav-hint">→ avanza · ← retrocede</div>
+</div>
+
+<!-- ==================== SLIDE 3 — ARKIV ==================== -->
+<div class="slide" id="s3">
+  <div class="slide-number">04 / 07</div>
+  <div class="badge badge-cyan">⛓️ Integración con Arkiv</div>
+  <h2 style="margin-bottom: 2rem;">Dos entidades con expiración diferenciada</h2>
+  <div class="entity-diagram">
+    <div class="entity-box">
+      <h4>🚛 fleet_profile</h4>
+      <div class="attr"><span class="label">project</span><span class="value str">"aerotrack"</span></div>
+      <div class="attr"><span class="label">type</span><span class="value str">"fleet_profile"</span></div>
+      <div class="attr"><span class="label">fleetId</span><span class="value str">"flota-norte-01"</span></div>
+      <div class="attr"><span class="label">operationalStatus</span><span class="value num">1</span></div>
+      <div class="attr" style="margin-top:0.5rem; padding-top:0.5rem; border-top:1px solid #27272a;"><span class="label">payload</span><span class="value" style="font-size:0.65rem; color: var(--text-dim);">{ mainRoute, vehicleType }</span></div>
+      <div class="expires">⏳ Expira en 30 días</div>
+    </div>
+    <div class="arrow-col">
+      <span>fleetId</span>
+      <div class="line"></div>
+      <span style="color: var(--text-dim);">◄──►</span>
+      <div class="line"></div>
+      <span>fleetId</span>
+    </div>
+    <div class="entity-box" style="border-color: rgba(245,158,11,0.25);">
+      <h4 style="color: #fbbf24;">⚠️ routing_decision</h4>
+      <div class="attr"><span class="label">project</span><span class="value str">"aerotrack"</span></div>
+      <div class="attr"><span class="label">type</span><span class="value str">"routing_decision"</span></div>
+      <div class="attr"><span class="label">fleetId</span><span class="value str">"flota-norte-01"</span></div>
+      <div class="attr"><span class="label">riskScore</span><span class="value num">8</span></div>
+      <div class="attr"><span class="label">createdAt</span><span class="value num">Date.now()</span></div>
+      <div class="attr" style="margin-top:0.5rem; padding-top:0.5rem; border-top:1px solid #27272a;"><span class="label">payload</span><span class="value" style="font-size:0.65rem; color: var(--text-dim);">{ aiJustification, model }</span></div>
+      <div class="expires" style="color: #fbbf24;">⏳ Expira en 24 horas</div>
+    </div>
+  </div>
+  <div style="display: flex; gap: 1.5rem; margin-top: 2rem; flex-wrap: wrap; justify-content: center;">
+    <div style="background:rgba(6,182,212,0.08); border:1px solid rgba(6,182,212,0.2); border-radius:0.75rem; padding:0.75rem 1.25rem; font-size:0.85rem;">
+      <strong style="color:var(--accent2);">PROJECT_ATTRIBUTE</strong><br><span style="color:#a1a1aa; font-size:0.8rem;">Namespace obligatorio en toda entidad y query</span>
+    </div>
+    <div style="background:rgba(245,158,11,0.08); border:1px solid rgba(245,158,11,0.2); border-radius:0.75rem; padding:0.75rem 1.25rem; font-size:0.85rem;">
+      <strong style="color:#fbbf24;">range queries</strong><br><span style="color:#a1a1aa; font-size:0.8rem;">riskScore → gt(5) para alto riesgo</span>
+    </div>
+    <div style="background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.2); border-radius:0.75rem; padding:0.75rem 1.25rem; font-size:0.85rem;">
+      <strong style="color:#34d399;">ExpirationTime</strong><br><span style="color:#a1a1aa; font-size:0.8rem;">Flotas 30d / Decisiones 24h — lógica de negocio</span>
+    </div>
+  </div>
+  <div class="footer-bar">
+    <div class="dot" onclick="goTo(0)"></div>
+    <div class="dot" onclick="goTo(1)"></div>
+    <div class="dot" onclick="goTo(2)"></div>
+    <div class="dot active" onclick="goTo(3)"></div>
+    <div class="dot" onclick="goTo(4)"></div>
+    <div class="dot" onclick="goTo(5)"></div>
+    <div class="dot" onclick="goTo(6)"></div>
+  </div>
+  <div class="nav-hint">→ avanza · ← retrocede</div>
+</div>
+
+<!-- ==================== SLIDE 4 — ARQUITECTURA ==================== -->
+<div class="slide" id="s4">
+  <div class="slide-number">05 / 07</div>
+  <div class="badge badge-cyan">🏗️ Decisiones de Diseño</div>
+  <h2 style="margin-bottom: 1.5rem;">Por qué se configuró así</h2>
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; width: 100%; max-width: 1100px;">
+    <div class="sol-card">
+      <div class="icon">🏷️</div>
+      <h4>PROJECT_ATTRIBUTE como namespace</h4>
+      <p>Arkiv es una base compartida por todos los proyectos. Sin <span class="keystyle">project: "aerotrack"</span>, una query devolvería entidades de otros equipos. Se estampa en toda creación y toda query como primer filtro.</p>
+    </div>
+    <div class="sol-card">
+      <div class="icon">🔢</div>
+      <h4>Atributos number, no string</h4>
+      <p><span class="keystyle">riskScore</span> como number permite <span class="keystyle">gt(5)</span> correctamente. Como string, <span class="keystyle">"10" &lt; "5"</span> por orden alfabético. Los atributos son índices; el payload es el contenido.</p>
+    </div>
+    <div class="sol-card">
+      <div class="icon">⏳</div>
+      <h4>Expiración diferencia lógica de negocio</h4>
+      <p>Flotas 30 días (datos duraderos) vs decisiones 24hs (una alerta de nieve pierde relevancia al día siguiente). La expiración no es un TTL técnico — modela la vida útil semántica del dato.</p>
+    </div>
+    <div class="sol-card">
+      <div class="icon">🔗</div>
+      <h4>fleetId como FK compartida</h4>
+      <p>Arkiv no tiene JOINs. Ambas entidades comparten <span class="keystyle">fleetId</span> como atributo, permitiendo <span class="keystyle">eq("fleetId", "flota-01")</span> para traer decisiones de una flota específica.</p>
+    </div>
+    <div class="sol-card">
+      <div class="icon">🔒</div>
+      <h4>serializeWrite con retry + backoff</h4>
+      <p>Transacciones simultáneas causan nonce races en testnet. <span class="keystyle">serializeWrite</span> encola writes secuencialmente y reintenta con backoff exponencial solo en errores retryable (429, nonce, red).</p>
+    </div>
+    <div class="sol-card">
+      <div class="icon">🔑</div>
+      <h4>Backend wallet — sin MetaMask</h4>
+      <p>El usuario nunca firma transacciones. La wallet server-side crea todas las entidades. <span class="keystyle">$creator</span> garantiza atribución inmutable. Blockchain 100% abstractada del usuario final.</p>
+    </div>
+  </div>
+  <div class="footer-bar">
+    <div class="dot" onclick="goTo(0)"></div>
+    <div class="dot" onclick="goTo(1)"></div>
+    <div class="dot" onclick="goTo(2)"></div>
+    <div class="dot" onclick="goTo(3)"></div>
+    <div class="dot active" onclick="goTo(4)"></div>
+    <div class="dot" onclick="goTo(5)"></div>
+    <div class="dot" onclick="goTo(6)"></div>
+  </div>
+  <div class="nav-hint">→ avanza · ← retrocede</div>
+</div>
+
+<!-- ==================== SLIDE 5 — DEMO ==================== -->
+<div class="slide" id="s5">
+  <div class="slide-number">06 / 07</div>
+  <div class="badge badge-cyan">🎬 Demo en vivo</div>
+  <h2 style="margin-bottom: 2rem;">Flujo de la demo</h2>
+  <div class="demo-flow">
+    <div class="demo-step">
+      <div class="step-num">1</div>
+      <p>Clickear <strong>"Cargar datos de prueba"</strong> — 3 flotas + 8 decisiones se crean como transacciones en Arkiv</p>
+    </div>
+    <div class="demo-step">
+      <div class="step-num">2</div>
+      <p>Clickear <strong>"Simular IA"</strong> — se genera una nueva decisión con riesgo aleatorio, visible en el dashboard</p>
+    </div>
+    <div class="demo-step">
+      <div class="step-num">3</div>
+      <p>Click en el <strong>ícono de enlace</strong> junto a una entidad — se abre el Data Explorer con el payload y metadata</p>
+    </div>
+    <div class="demo-step">
+      <div class="step-num">4</div>
+      <p>Cambiar el <strong>estado operativo</strong> de una flota — la transacción queda registrada on-chain con txHash</p>
+    </div>
+    <div class="demo-step">
+      <div class="step-num">5</div>
+      <p>Filtrar <strong>solo alto riesgo</strong> (score &gt; 5) — query con <span class="keystyle">riskScore</span> como atributo numérico</p>
+    </div>
+  </div>
+  <div style="margin-top: 2rem; display: flex; gap: 1rem; align-items: center; justify-content: center;">
+    <span style="font-size: 0.8rem; color: var(--text-dim);">Cada acción produce un</span>
+    <span class="keystyle" style="font-size: 0.85rem; padding: 0.3rem 0.75rem;">txHash verificable en Block Explorer</span>
+  </div>
+  <div class="footer-bar">
+    <div class="dot" onclick="goTo(0)"></div>
+    <div class="dot" onclick="goTo(1)"></div>
+    <div class="dot" onclick="goTo(2)"></div>
+    <div class="dot" onclick="goTo(3)"></div>
+    <div class="dot" onclick="goTo(4)"></div>
+    <div class="dot active" onclick="goTo(5)"></div>
+    <div class="dot" onclick="goTo(6)"></div>
+  </div>
+  <div class="nav-hint">→ avanza · ← retrocede</div>
+</div>
+
+<!-- ==================== SLIDE 6 — CIERRE ==================== -->
+<div class="slide" id="s6">
+  <div class="slide-number">07 / 07</div>
+  <div class="section-icon">🛡️</div>
+  <div class="title-center">
+    <h1><span class="gradient">Inmutable.</span> <span style="color: var(--text);">Auditable.</span> <span class="gradient">Del usuario.</span></h1>
+    <p class="subtitle" style="margin-top: 1rem; margin-bottom: 2rem;">
+      La memoria operativa de la IA es portable y controlada<br>por la infraestructura del usuario — <em>no por un tercero</em>.
+    </p>
+    <p style="font-size: 1.1rem; color: var(--text-dim); margin-bottom: 0.5rem;">
+      Arkiv no es un checkbox al final — <strong style="color: var(--accent2);">es el corazón del sistema</strong>.
+    </p>
+  </div>
+  <div class="closing-links">
+    <a href="https://github.com/gabriel-alejandropereagarcia/aerotrack-sentinel" target="_blank">📂 github.com/gabriel-alejandropereagarcia/aerotrack-sentinel</a>
+    <a href="https://aerotrack-sentinel.vercel.app" target="_blank">🌐 aerotrack-sentinel.vercel.app</a>
+  </div>
+  <div class="tag-row" style="margin-top: 2.5rem;">
+    <span class="tag">Procedencia & Auditoría de IA</span>
+    <span class="tag tag-green">Entidades Inmutables</span>
+    <span class="tag tag-amber">Expiración Lógica</span>
+  </div>
+  <div class="footer-bar">
+    <div class="dot" onclick="goTo(0)"></div>
+    <div class="dot" onclick="goTo(1)"></div>
+    <div class="dot" onclick="goTo(2)"></div>
+    <div class="dot" onclick="goTo(3)"></div>
+    <div class="dot" onclick="goTo(4)"></div>
+    <div class="dot" onclick="goTo(5)"></div>
+    <div class="dot active" onclick="goTo(6)"></div>
+  </div>
+  <div class="nav-hint">→ avanza · ← retrocede</div>
+</div>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+let current = 0;
+
+function goTo(n) {
+  slides[current].classList.remove('active');
+  current = Math.max(0, Math.min(slides.length - 1, n));
+  slides[current].classList.add('active');
+  localStorage.setItem('aerotrack-slide', current);
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); goTo(current + 1); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(current - 1); }
+  if (e.key === 'Home') { e.preventDefault(); goTo(0); }
+  if (e.key === 'End') { e.preventDefault(); goTo(slides.length - 1); }
+});
+
+const saved = localStorage.getItem('aerotrack-slide');
+if (saved !== null) { goTo(parseInt(saved)); }
+</script>
+
+</body>
+</html>
