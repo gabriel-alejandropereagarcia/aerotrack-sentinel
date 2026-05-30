@@ -19,22 +19,22 @@ export function classifyArkivError(err: unknown): ClassifiedError {
   const msg = err instanceof Error ? err.message : String(err).toLowerCase()
 
   if (/429|rate.?limit/i.test(msg)) {
-    return { category: "rate_limit", message: "Demasiadas solicitudes. Intent\u00e1 de nuevo en unos segundos.", retryable: true }
+    return { category: "rate_limit", message: "Demasiadas solicitudes. Intentá de nuevo en unos segundos.", retryable: true }
   }
   if (/nonce|already known|replacement.*underpriced|underpriced/i.test(msg)) {
-    return { category: "nonce_race", message: "Conflicto de transacci\u00f3n. Reintentando autom\u00e1ticamente...", retryable: true }
+    return { category: "nonce_race", message: "Conflicto de transacción. Reintentando automáticamente...", retryable: true }
   }
   if (/insufficient|funds|balance|glm/i.test(msg)) {
-    return { category: "insufficient_funds", message: "Fondos insuficientes en tu wallet. Obten\u00e9 GLM del faucet: https://braga.hoodi.arkiv.network/faucet/", retryable: false }
+    return { category: "insufficient_funds", message: "Fondos insuficientes en tu wallet. Obtené GLM del faucet: https://braga.hoodi.arkiv.network/faucet/", retryable: false }
   }
   if (/expired|already expired/i.test(msg)) {
-    return { category: "expired_entity", message: "La entidad ya expir\u00f3 en Arkiv.", retryable: false }
+    return { category: "expired_entity", message: "La entidad ya expiró en Arkiv.", retryable: false }
   }
   if (/reject|denied|cancel|user reject/i.test(msg)) {
-    return { category: "user_rejected", message: "Transacci\u00f3n rechazada.", retryable: false }
+    return { category: "user_rejected", message: "Transacción rechazada.", retryable: false }
   }
   if (/network|fetch|timeout|ECONNREFUSED|ECONNRESET/i.test(msg)) {
-    return { category: "network", message: "Error de conexi\u00f3n con la red Arkiv. Reintentando...", retryable: true }
+    return { category: "network", message: "Error de conexión con la red Arkiv. Reintentando...", retryable: true }
   }
 
   return { category: "unknown", message: `Error inesperado: ${msg}`, retryable: false }
@@ -46,7 +46,7 @@ function withTimeout<T>(p: Promise<T>, ms: number): Promise<T> {
   return Promise.race([
     p,
     new Promise<T>((_, rej) =>
-      setTimeout(() => rej(new Error(`Operaci\u00f3n en Arkiv excedi\u00f3 el tiempo l\u00edmite de ${ms / 1000}s`)), ms)
+      setTimeout(() => rej(new Error(`Operación en Arkiv excedió el tiempo límite de ${ms / 1000}s`)), ms)
     ),
   ])
 }

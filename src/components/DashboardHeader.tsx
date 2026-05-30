@@ -15,7 +15,7 @@ export function DashboardHeader() {
                 AeroTrack Sentinel
               </h1>
               <p className="text-xs text-zinc-500">
-                Auditor\u00eda log\u00edstica con IA &middot; Datos verificables en Arkiv
+                Auditoría logística con IA · Datos verificables en Arkiv
               </p>
             </div>
           </div>
@@ -35,7 +35,7 @@ export function DashboardHeader() {
           </div>
         </div>
         <div className="mt-3 p-3 bg-zinc-900/50 border border-zinc-800 rounded-lg text-xs text-zinc-400 leading-relaxed">
-          <strong className="text-zinc-300">\u00bfQu\u00e9 hace esta app?</strong> Cada vez que un modelo de IA sugiere una ruta log\u00edstica, AeroTrack registra esa decisi\u00f3n <strong className="text-cyan-400">inmutablemente</strong> en la blockchain de Arkiv. Nadie puede alterar o eliminar un registro a escondidas &mdash; cada decisi\u00f3n es verificable p\u00fablicamente. Los n\u00fameros de transacci\u00f3n que ves en la tabla son la prueba: hac clic en el \u00edcono de enlace para verificar en el explorador de bloques.
+          <strong className="text-zinc-300">¿Qué hace esta app?</strong> Cada vez que un modelo de IA sugiere una ruta logística, AeroTrack registra esa decisión <strong className="text-cyan-400">inmutablemente</strong> en la blockchain de Arkiv. Nadie puede alterar o eliminar un registro a escondidas — cada decisión es verificable públicamente. Los números de transacción que ves en la tabla son la prueba: hacé clic en el ícono de enlace para verificar en el explorador de bloques.
         </div>
       </div>
     </header>

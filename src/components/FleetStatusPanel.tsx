@@ -8,17 +8,17 @@ import { MapPin, Truck, ExternalLink } from "lucide-react"
 import { useUpdateFleetStatus } from "@/hooks/useArkivData"
 import type { FleetProfile } from "@/types"
 
-const STATUS_MAP: Record<number, { label: string; variant: "default" | "secondary" | "destructive" | "outline"; color: string }> = {
-  0: { label: "Inactivo", variant: "secondary", color: "zinc" },
-  1: { label: "Operativo", variant: "default", color: "emerald" },
-  2: { label: "En Mantenci\u00f3n", variant: "outline", color: "amber" },
-  3: { label: "Emergencia", variant: "destructive", color: "red" },
+const STATUS_MAP: Record<number, { label: string; variant: "default" | "secondary" | "destructive" | "outline" }> = {
+  0: { label: "Inactivo", variant: "secondary" },
+  1: { label: "Operativo", variant: "default" },
+  2: { label: "En Mantención", variant: "outline" },
+  3: { label: "Emergencia", variant: "destructive" },
 }
 
 const STATUS_OPTIONS = [
   { value: 0, label: "Inactivo" },
   { value: 1, label: "Operativo" },
-  { value: 2, label: "Mantenci\u00f3n" },
+  { value: 2, label: "Mantenimiento" },
   { value: 3, label: "Emergencia" },
 ]
 
@@ -74,7 +74,7 @@ export function FleetStatusPanel({ fleets, isLoading, selectedFleetId, onSelectF
     return (
       <Card className="bg-zinc-900 border-zinc-800">
         <CardContent className="p-6 text-center text-zinc-500">
-          No hay flotas registradas. Carg\u00e1 datos de prueba para comenzar.
+          No hay flotas registradas. Cargá datos de prueba para comenzar.
         </CardContent>
       </Card>
     )
@@ -83,7 +83,7 @@ export function FleetStatusPanel({ fleets, isLoading, selectedFleetId, onSelectF
   return (
     <div className="space-y-3">
       {fleets.map((fleet) => {
-        const status = STATUS_MAP[fleet.operationalStatus] ?? { label: "Desconocido", variant: "outline" as const, color: "zinc" }
+        const status = STATUS_MAP[fleet.operationalStatus] ?? { label: "Desconocido", variant: "outline" as const }
         const isSelected = selectedFleetId === fleet.fleetId
         const isUpdating = updatingKey === fleet.arkivEntityKey
 
@@ -151,7 +151,7 @@ export function FleetStatusPanel({ fleets, isLoading, selectedFleetId, onSelectF
                     className="text-[10px] text-emerald-500 hover:text-emerald-400 font-mono"
                     onClick={(e) => e.stopPropagation()}
                   >
-                    Tx: {shortenHash(updateStatus.data.txHash)} \u2713
+                    Tx: {shortenHash(updateStatus.data.txHash)} ✓
                   </a>
                 </div>
               )}

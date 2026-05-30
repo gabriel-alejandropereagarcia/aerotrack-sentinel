@@ -35,9 +35,9 @@ export default function DashboardPage() {
         {error && (
           <Alert variant="destructive" className="mb-6">
             <AlertCircle className="h-4 w-4" />
-            <AlertTitle>Error de conexi\u00f3n</AlertTitle>
+            <AlertTitle>Error de conexión</AlertTitle>
             <AlertDescription>
-              No se pudo conectar con la red Arkiv. Verific\u00e1 tu conexi\u00f3n e intent\u00e1 de nuevo.
+              No se pudo conectar con la red Arkiv. Verificá tu conexión e intentá de nuevo.
             </AlertDescription>
           </Alert>
         )}
@@ -56,7 +56,7 @@ export default function DashboardPage() {
             <AlertCircle className="h-4 w-4" />
             <AlertTitle>Error al simular IA</AlertTitle>
             <AlertDescription>
-              {(simulateIa.error as Error)?.message || "No se pudo crear la decisi\u00f3n en Arkiv."}
+              {(simulateIa.error as Error)?.message || "No se pudo crear la decisión en Arkiv."}
             </AlertDescription>
           </Alert>
         )}
@@ -73,9 +73,9 @@ export default function DashboardPage() {
 
         {simulateIa.isSuccess && simulateIa.data && (
           <Alert className="mb-4 bg-emerald-950/50 border-emerald-800 text-emerald-300">
-            <AlertTitle>Decisi\u00f3n registrada en Arkiv</AlertTitle>
+            <AlertTitle>Decisión registrada en Arkiv</AlertTitle>
             <AlertDescription className="flex flex-col gap-1">
-              <span>Flota: {simulateIa.data.fleetId} &middot; Riesgo: {simulateIa.data.riskScore}/10</span>
+              <span>Flota: {simulateIa.data.fleetId} · Riesgo: {simulateIa.data.riskScore}/10</span>
               <a
                 href={`${BLOCK_EXPLORER}/tx/${simulateIa.data.txHash}`}
                 target="_blank"
@@ -83,7 +83,7 @@ export default function DashboardPage() {
                 className="text-emerald-400 hover:text-emerald-300 font-mono text-xs flex items-center gap-1"
               >
                 <ExternalLink className="h-3 w-3" />
-                Ver transacci\u00f3n en explorador: {simulateIa.data.txHash.slice(0, 16)}...
+                Ver transacción en explorador: {simulateIa.data.txHash.slice(0, 16)}...
               </a>
             </AlertDescription>
           </Alert>
@@ -102,7 +102,7 @@ export default function DashboardPage() {
                   className="text-emerald-400 hover:text-emerald-300 font-mono text-xs flex items-center gap-1"
                 >
                   <ExternalLink className="h-3 w-3" />
-                  Ver transacci\u00f3n batch en explorador
+                  Ver transacción batch en explorador
                 </a>
               )}
             </AlertDescription>
@@ -153,8 +153,8 @@ export default function DashboardPage() {
         <Separator className="my-8 bg-zinc-800" />
 
         <div className="text-center text-xs text-zinc-600 pb-6 space-y-1">
-          <p>AeroTrack Sentinel &mdash; Datos inmutables en Arkiv Testnet (Braga)</p>
-          <p className="text-zinc-700">Hackathon ARKIV x PunaTech 2026 &middot; Cada transacci\u00f3n es verificable en el explorador de bloques</p>
+          <p>AeroTrack Sentinel — Datos inmutables en Arkiv Testnet (Braga)</p>
+          <p className="text-zinc-700">Hackathon ARKIV × PunaTech 2026 · Cada transacción es verificable en el explorador de bloques</p>
         </div>
       </main>
     </div>

@@ -85,7 +85,7 @@ export function RiskDecisionsTable({ decisions, isLoading }: RiskDecisionsTableP
           <div className="text-center py-12 text-zinc-500">
             <Shield className="h-12 w-12 mx-auto mb-3 text-zinc-700" />
             <p className="text-sm">Sin decisiones registradas.</p>
-            <p className="text-xs mt-1">Us\u00e1 &quot;Simular IA&quot; para generar datos de prueba.</p>
+            <p className="text-xs mt-1">Usá "Simular IA" para generar datos de prueba.</p>
           </div>
         </CardContent>
       </Card>
@@ -112,12 +112,12 @@ export function RiskDecisionsTable({ decisions, isLoading }: RiskDecisionsTableP
               <TableRow className="border-zinc-800 hover:bg-transparent">
                 <TableHead className="text-zinc-400">Flota</TableHead>
                 <TableHead className="text-zinc-400">Riesgo</TableHead>
-                <TableHead className="text-zinc-400">Justificaci\u00f3n IA</TableHead>
+                <TableHead className="text-zinc-400">Justificación IA</TableHead>
                 <TableHead className="text-zinc-400">Modelo</TableHead>
                 <TableHead className="text-zinc-400 text-right">
                   <Clock className="h-3 w-3 inline" /> Fecha
                 </TableHead>
-                <TableHead className="text-zinc-400 text-right">Tx / Entidad</TableHead>
+                <TableHead className="text-zinc-400 text-right">Entidad</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -139,20 +139,16 @@ export function RiskDecisionsTable({ decisions, isLoading }: RiskDecisionsTableP
                     {formatTimestamp(d.createdAt)}
                   </TableCell>
                   <TableCell className="text-right">
-                    <div className="flex items-center justify-end gap-1.5">
-                      <a
-                        href={`${DATA_EXPLORER}/${d.arkivEntityKey}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-zinc-500 hover:text-cyan-400 transition-colors"
-                        title="Ver en Data Explorer"
-                      >
-                        <ExternalLink className="h-3 w-3" />
-                      </a>
-                      <span className="text-[10px] font-mono text-zinc-600" title={d.arkivEntityKey}>
-                        {shortenHash(d.arkivEntityKey)}
-                      </span>
-                    </div>
+                    <a
+                      href={`${DATA_EXPLORER}/${d.arkivEntityKey}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[10px] font-mono text-zinc-600 hover:text-cyan-400 transition-colors flex items-center justify-end gap-1"
+                      title="Ver en Data Explorer"
+                    >
+                      {shortenHash(d.arkivEntityKey)}
+                      <ExternalLink className="h-2.5 w-2.5" />
+                    </a>
                   </TableCell>
                 </TableRow>
               ))}

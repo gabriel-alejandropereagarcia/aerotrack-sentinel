@@ -121,14 +121,14 @@ export async function seedDemoData(): Promise<{
     riskScore: number
     payload: RoutingDecisionPayload
   }> = [
-    { fleetId: "flota-norte-01", riskScore: 8, payload: { aiJustification: "Desv\u00edo sugerido por clima adverso en Ruta 9 Norte. Tormenta el\u00e9ctrica con visibilidad reducida.", model: "aero-v2" } },
-    { fleetId: "flota-norte-01", riskScore: 3, payload: { aiJustification: "Tr\u00e1fico leve detectado. Ruta habitual sin inconvenientes.", model: "aero-v2" } },
-    { fleetId: "flota-sur-02", riskScore: 7, payload: { aiJustification: "Alerta de corte de ruta por protestas en Ruta 3 Sur. Desv\u00edo recomendado.", model: "aero-v2" } },
+    { fleetId: "flota-norte-01", riskScore: 8, payload: { aiJustification: "Desvío sugerido por clima adverso en Ruta 9 Norte. Tormenta eléctrica con visibilidad reducida.", model: "aero-v2" } },
+    { fleetId: "flota-norte-01", riskScore: 3, payload: { aiJustification: "Tráfico leve detectado. Ruta habitual sin inconvenientes.", model: "aero-v2" } },
+    { fleetId: "flota-sur-02", riskScore: 7, payload: { aiJustification: "Alerta de corte de ruta por protestas en Ruta 3 Sur. Desvío recomendado.", model: "aero-v2" } },
     { fleetId: "flota-sur-02", riskScore: 9, payload: { aiJustification: "Nieve intensa en pasos andinos. Riesgo extremo para transporte refrigerado.", model: "aero-v2" } },
-    { fleetId: "flota-centro-03", riskScore: 2, payload: { aiJustification: "Condiciones \u00f3ptimas en Ruta 2 Centro. Sin alertas.", model: "aero-v1" } },
-    { fleetId: "flota-norte-01", riskScore: 6, payload: { aiJustification: "Obra en tramo de Ruta 9. Retraso estimado 45 min. Desv\u00edo alternativo disponible.", model: "aero-v2" } },
-    { fleetId: "flota-sur-02", riskScore: 4, payload: { aiJustification: "Lluvia moderada en Ruta 3 Sur. Precauci\u00f3n pero sin necesidad de desv\u00edo.", model: "aero-v1" } },
-    { fleetId: "flota-centro-03", riskScore: 10, payload: { aiJustification: "Emergencia: puente colapsado en Ruta 2. Desv\u00edo obligatorio por Ruta Alternativa 5.", model: "aero-v2" } },
+    { fleetId: "flota-centro-03", riskScore: 2, payload: { aiJustification: "Condiciones óptimas en Ruta 2 Centro. Sin alertas.", model: "aero-v1" } },
+    { fleetId: "flota-norte-01", riskScore: 6, payload: { aiJustification: "Obra en tramo de Ruta 9. Retraso estimado 45 min. Desvío alternativo disponible.", model: "aero-v2" } },
+    { fleetId: "flota-sur-02", riskScore: 4, payload: { aiJustification: "Lluvia moderada en Ruta 3 Sur. Precaución pero sin necesidad de desvío.", model: "aero-v1" } },
+    { fleetId: "flota-centro-03", riskScore: 10, payload: { aiJustification: "Emergencia: puente colapsado en Ruta 2. Desvío obligatorio por Ruta Alternativa 5.", model: "aero-v2" } },
   ]
 
   const fleetCreates = fleets.map((f) => ({

@@ -48,7 +48,7 @@ export function useSimulateIa() {
       const res = await fetch("/api/simulate-ia", { method: "POST" })
       if (!res.ok) {
         const body = await res.json().catch(() => ({}))
-        throw new Error(body.error || "Error al crear la decisi\u00f3n en Arkiv")
+        throw new Error(body.error || "Error al crear la decisión en Arkiv")
       }
       return res.json()
     },

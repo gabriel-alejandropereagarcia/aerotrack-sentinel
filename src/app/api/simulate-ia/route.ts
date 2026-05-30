@@ -3,15 +3,15 @@ import { createRoutingDecision } from "@/services/arkivmutations"
 import { classifyArkivError } from "@/lib/arkiv-errors"
 
 const JUSTIFICATIONS = [
-  "Desv\u00edo sugerido por clima adverso. Visibilidad reducida en ruta principal.",
-  "Tr\u00e1fico intenso detectado. Ruta alternativa m\u00e1s eficiente.",
-  "Alerta de Accidente vehicular en trayecto. Demora estimada 30 minutos.",
+  "Desvío sugerido por clima adverso. Visibilidad reducida en ruta principal.",
+  "Tráfico intenso detectado. Ruta alternativa más eficiente.",
+  "Alerta de accidente vehicular en trayecto. Demora estimada 30 minutos.",
   "Nieve intensa en pasos andinos. Riesgo extremo para transporte.",
-  "Obra en tramo de ruta. Desv\u00edo alternativo disponible.",
-  "Protestas bloqueando Ruta 3. Desv\u00edo obligatorio por Ruta Alternativa.",
-  "Condiciones \u00f3ptimas. Sin alertas significativas.",
+  "Obra en tramo de ruta. Desvío alternativo disponible.",
+  "Protestas bloqueando Ruta 3. Desvío obligatorio por Ruta Alternativa.",
+  "Condiciones óptimas. Sin alertas significativas.",
   "Emergencia: puente colapsado. Ruta completamente interrumpida.",
-  "Lluvia moderada. Precauci\u00f3n pero sin necesidad de desv\u00edo.",
+  "Lluvia moderada. Precaución pero sin necesidad de desvío.",
   "Viento fuerte con riesgo de vuelco para transporte pesado.",
 ]
 
