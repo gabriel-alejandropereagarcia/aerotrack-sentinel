@@ -13,7 +13,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { AlertTriangle, Shield, Clock, ExternalLink } from "lucide-react"
 import type { RoutingDecision } from "@/types"
 
+const DATA_EXPLORER = "https://data.arkiv.network"
+
 function formatTimestamp(ms: number): string {
+  if (!ms || ms === 0) return "—"
   return new Date(ms).toLocaleString("es-AR", {
     day: "2-digit",
     month: "2-digit",
@@ -22,9 +25,9 @@ function formatTimestamp(ms: number): string {
   })
 }
 
-function shortenAddress(addr: string | undefined): string {
-  if (!addr) return "—"
-  return `${addr.slice(0, 6)}...${addr.slice(-4)}`
+function shortenHash(hash: string): string {
+  if (!hash) return "—"
+  return `${hash.slice(0, 10)}...${hash.slice(-6)}`
 }
 
 function RiskBadge({ score }: { score: number }) {
@@ -114,7 +117,7 @@ export function RiskDecisionsTable({ decisions, isLoading }: RiskDecisionsTableP
                 <TableHead className="text-zinc-400 text-right">
                   <Clock className="h-3 w-3 inline" /> Fecha
                 </TableHead>
-                <TableHead className="text-zinc-400 w-10"></TableHead>
+                <TableHead className="text-zinc-400 text-right">Tx / Entidad</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -126,7 +129,7 @@ export function RiskDecisionsTable({ decisions, isLoading }: RiskDecisionsTableP
                   <TableCell>
                     <RiskBadge score={d.riskScore} />
                   </TableCell>
-                  <TableCell className="max-w-[300px] text-sm text-zinc-300 truncate">
+                  <TableCell className="max-w-[260px] text-sm text-zinc-300 truncate" title={d.payload.aiJustification}>
                     {d.payload.aiJustification}
                   </TableCell>
                   <TableCell className="text-xs text-zinc-500">
@@ -135,16 +138,21 @@ export function RiskDecisionsTable({ decisions, isLoading }: RiskDecisionsTableP
                   <TableCell className="text-xs text-zinc-500 text-right">
                     {formatTimestamp(d.createdAt)}
                   </TableCell>
-                  <TableCell>
-                    <a
-                      href={`https://data.arkiv.network/${d.arkivEntityKey}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-zinc-500 hover:text-cyan-400 transition-colors inline-flex"
-                      title="Ver en Data Explorer"
-                    >
-                      <ExternalLink className="h-3 w-3" />
-                    </a>
+                  <TableCell className="text-right">
+                    <div className="flex items-center justify-end gap-1.5">
+                      <a
+                        href={`${DATA_EXPLORER}/${d.arkivEntityKey}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-zinc-500 hover:text-cyan-400 transition-colors"
+                        title="Ver en Data Explorer"
+                      >
+                        <ExternalLink className="h-3 w-3" />
+                      </a>
+                      <span className="text-[10px] font-mono text-zinc-600" title={d.arkivEntityKey}>
+                        {shortenHash(d.arkivEntityKey)}
+                      </span>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))}
@@ -153,7 +161,7 @@ export function RiskDecisionsTable({ decisions, isLoading }: RiskDecisionsTableP
         </div>
         {decisions[0]?.creator && (
           <div className="mt-3 text-[10px] text-zinc-600 font-mono">
-            Datos verificados &middot; Creador: {shortenAddress(decisions[0].creator)}
+            Creador verificable: {decisions[0].creator}
           </div>
         )}
       </CardContent>

@@ -8,24 +8,26 @@ import { MapPin, Truck, ExternalLink } from "lucide-react"
 import { useUpdateFleetStatus } from "@/hooks/useArkivData"
 import type { FleetProfile } from "@/types"
 
-const STATUS_MAP: Record<number, { label: string; variant: "default" | "secondary" | "destructive" | "outline" }> = {
-  0: { label: "Inactivo", variant: "secondary" },
-  1: { label: "Operativo", variant: "default" },
-  2: { label: "En Mantenci\u00f3n", variant: "outline" },
-  3: { label: "Emergencia", variant: "destructive" },
+const STATUS_MAP: Record<number, { label: string; variant: "default" | "secondary" | "destructive" | "outline"; color: string }> = {
+  0: { label: "Inactivo", variant: "secondary", color: "zinc" },
+  1: { label: "Operativo", variant: "default", color: "emerald" },
+  2: { label: "En Mantenci\u00f3n", variant: "outline", color: "amber" },
+  3: { label: "Emergencia", variant: "destructive", color: "red" },
 }
 
 const STATUS_OPTIONS = [
   { value: 0, label: "Inactivo" },
   { value: 1, label: "Operativo" },
-  { value: 2, label: "En Mantenci\u00f3n" },
+  { value: 2, label: "Mantenci\u00f3n" },
   { value: 3, label: "Emergencia" },
 ]
 
-function shortenAddress(addr: string | undefined): string {
-  if (!addr) return "—"
-  return `${addr.slice(0, 6)}...${addr.slice(-4)}`
+function shortenHash(hash: string | undefined): string {
+  if (!hash) return ""
+  return `${hash.slice(0, 10)}...${hash.slice(-6)}`
 }
+
+const BLOCK_EXPLORER = "https://explorer.braga.hoodi.arkiv.network"
 
 interface FleetStatusPanelProps {
   fleets: FleetProfile[]
@@ -81,10 +83,9 @@ export function FleetStatusPanel({ fleets, isLoading, selectedFleetId, onSelectF
   return (
     <div className="space-y-3">
       {fleets.map((fleet) => {
-        const status = STATUS_MAP[fleet.operationalStatus] ?? { label: "Desconocido", variant: "outline" as const }
+        const status = STATUS_MAP[fleet.operationalStatus] ?? { label: "Desconocido", variant: "outline" as const, color: "zinc" }
         const isSelected = selectedFleetId === fleet.fleetId
         const isUpdating = updatingKey === fleet.arkivEntityKey
-        const explorerUrl = `https://data.arkiv.network/${fleet.arkivEntityKey}`
 
         return (
           <Card
@@ -99,22 +100,10 @@ export function FleetStatusPanel({ fleets, isLoading, selectedFleetId, onSelectF
             <CardHeader className="pb-2 pt-4 px-4">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-sm font-mono text-zinc-100">{fleet.fleetId}</CardTitle>
-                <div className="flex items-center gap-1.5">
-                  <Badge variant={status.variant}>{status.label}</Badge>
-                  <a
-                    href={explorerUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={(e) => e.stopPropagation()}
-                    className="text-zinc-500 hover:text-cyan-400 transition-colors"
-                    title="Ver en Data Explorer"
-                  >
-                    <ExternalLink className="h-3 w-3" />
-                  </a>
-                </div>
+                <Badge variant={status.variant}>{status.label}</Badge>
               </div>
             </CardHeader>
-            <CardContent className="px-4 pb-4">
+            <CardContent className="px-4 pb-3">
               <div className="flex items-center gap-2 text-xs text-zinc-400">
                 <MapPin className="h-3 w-3" />
                 <span>{fleet.payload.mainRoute}</span>
@@ -123,12 +112,20 @@ export function FleetStatusPanel({ fleets, isLoading, selectedFleetId, onSelectF
                 <Truck className="h-3 w-3" />
                 <span>{fleet.payload.vehicleType}</span>
               </div>
-              {fleet.creator && (
-                <div className="text-[10px] text-zinc-600 mt-2 font-mono" title={fleet.creator}>
-                  Creado por: {shortenAddress(fleet.creator)}
-                </div>
-              )}
-              <div className="mt-2 flex gap-1">
+              <div className="mt-2 pt-2 border-t border-zinc-800/50">
+                <a
+                  href={`${BLOCK_EXPLORER}/tx/${fleet.arkivEntityKey}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[10px] font-mono text-zinc-600 hover:text-cyan-400 transition-colors flex items-center gap-1"
+                  onClick={(e) => e.stopPropagation()}
+                  title="Ver entidad en el explorador de bloques"
+                >
+                  <ExternalLink className="h-2.5 w-2.5" />
+                  {shortenHash(fleet.arkivEntityKey)}
+                </a>
+              </div>
+              <div className="mt-2 flex flex-wrap gap-1">
                 {STATUS_OPTIONS.filter((o) => o.value !== fleet.operationalStatus).map((opt) => (
                   <Button
                     key={opt.value}
@@ -145,6 +142,19 @@ export function FleetStatusPanel({ fleets, isLoading, selectedFleetId, onSelectF
                   </Button>
                 ))}
               </div>
+              {updateStatus.isSuccess && updateStatus.data && (
+                <div className="mt-1">
+                  <a
+                    href={`${BLOCK_EXPLORER}/tx/${updateStatus.data.txHash}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[10px] text-emerald-500 hover:text-emerald-400 font-mono"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    Tx: {shortenHash(updateStatus.data.txHash)} \u2713
+                  </a>
+                </div>
+              )}
             </CardContent>
           </Card>
         )

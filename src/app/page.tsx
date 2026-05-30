@@ -8,7 +8,9 @@ import { SimulateIaButton } from "@/components/SimulateIaButton"
 import { useFleetProfiles, useRoutingDecisions, useSimulateIa, useSeedDemo } from "@/hooks/useArkivData"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Separator } from "@/components/ui/separator"
-import { AlertCircle, ShieldAlert, BarChart3 } from "lucide-react"
+import { AlertCircle, ShieldAlert, BarChart3, ExternalLink } from "lucide-react"
+
+const BLOCK_EXPLORER = "https://explorer.braga.hoodi.arkiv.network"
 
 export default function DashboardPage() {
   const [selectedFleetId, setSelectedFleetId] = useState<string | null>(null)
@@ -69,20 +71,40 @@ export default function DashboardPage() {
           </Alert>
         )}
 
-        {simulateIa.isSuccess && (
+        {simulateIa.isSuccess && simulateIa.data && (
           <Alert className="mb-4 bg-emerald-950/50 border-emerald-800 text-emerald-300">
-            <AlertTitle>Decisi\u00f3n registrada</AlertTitle>
-            <AlertDescription>
-              Nueva decisi\u00f3n de ruta creada en Arkiv (Flota: {simulateIa.data.fleetId}, Riesgo: {simulateIa.data.riskScore}/10)
+            <AlertTitle>Decisi\u00f3n registrada en Arkiv</AlertTitle>
+            <AlertDescription className="flex flex-col gap-1">
+              <span>Flota: {simulateIa.data.fleetId} &middot; Riesgo: {simulateIa.data.riskScore}/10</span>
+              <a
+                href={`${BLOCK_EXPLORER}/tx/${simulateIa.data.txHash}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-emerald-400 hover:text-emerald-300 font-mono text-xs flex items-center gap-1"
+              >
+                <ExternalLink className="h-3 w-3" />
+                Ver transacci\u00f3n en explorador: {simulateIa.data.txHash.slice(0, 16)}...
+              </a>
             </AlertDescription>
           </Alert>
         )}
 
-        {seedDemo.isSuccess && (
+        {seedDemo.isSuccess && seedDemo.data && (
           <Alert className="mb-4 bg-emerald-950/50 border-emerald-800 text-emerald-300">
-            <AlertTitle>Datos de prueba cargados</AlertTitle>
-            <AlertDescription>
-              Se crearon {seedDemo.data.fleetProfiles.length} flotas y {seedDemo.data.routingDecisions.length} decisiones de ruta en Arkiv.
+            <AlertTitle>Datos de prueba cargados en Arkiv</AlertTitle>
+            <AlertDescription className="flex flex-col gap-1">
+              <span>{seedDemo.data.fleetProfiles.length} flotas + {seedDemo.data.routingDecisions.length} decisiones de ruta creadas.</span>
+              {seedDemo.data.fleetProfiles.length > 0 && (
+                <a
+                  href={`${BLOCK_EXPLORER}/tx/${seedDemo.data.fleetProfiles[0].txHash}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-emerald-400 hover:text-emerald-300 font-mono text-xs flex items-center gap-1"
+                >
+                  <ExternalLink className="h-3 w-3" />
+                  Ver transacci\u00f3n batch en explorador
+                </a>
+              )}
             </AlertDescription>
           </Alert>
         )}
@@ -130,8 +152,9 @@ export default function DashboardPage() {
 
         <Separator className="my-8 bg-zinc-800" />
 
-        <div className="text-center text-xs text-zinc-600 pb-6">
-          AeroTrack Sentinel &mdash; Datos almacenados inmutablemente en Arkiv Testnet (Braga) &mdash; Hackathon ARKIV x PunaTech 2026
+        <div className="text-center text-xs text-zinc-600 pb-6 space-y-1">
+          <p>AeroTrack Sentinel &mdash; Datos inmutables en Arkiv Testnet (Braga)</p>
+          <p className="text-zinc-700">Hackathon ARKIV x PunaTech 2026 &middot; Cada transacci\u00f3n es verificable en el explorador de bloques</p>
         </div>
       </main>
     </div>

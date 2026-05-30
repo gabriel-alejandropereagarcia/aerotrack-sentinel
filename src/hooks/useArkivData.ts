@@ -46,7 +46,10 @@ export function useSimulateIa() {
   return useMutation({
     mutationFn: async (): Promise<SimulateIaResponse> => {
       const res = await fetch("/api/simulate-ia", { method: "POST" })
-      if (!res.ok) throw new Error("Failed to simulate IA")
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}))
+        throw new Error(body.error || "Error al crear la decisi\u00f3n en Arkiv")
+      }
       return res.json()
     },
     onSuccess: () => {
@@ -60,7 +63,10 @@ export function useSeedDemo() {
   return useMutation({
     mutationFn: async (): Promise<SeedDemoResponse> => {
       const res = await fetch("/api/seed-demo", { method: "POST" })
-      if (!res.ok) throw new Error("Failed to seed demo data")
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}))
+        throw new Error(body.error || "Error al cargar datos de prueba")
+      }
       return res.json()
     },
     onSuccess: () => {
@@ -83,7 +89,10 @@ export function useUpdateFleetStatus() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(params),
       })
-      if (!res.ok) throw new Error("Failed to update fleet status")
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}))
+        throw new Error(body.error || "Error al actualizar estado de la flota")
+      }
       return res.json()
     },
     onSuccess: () => {

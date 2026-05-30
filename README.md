@@ -4,6 +4,8 @@
 
 Proyecto para el **Hackathon ARKIV x PunaTech 2026**.
 
+**Cada decisión de ruta registrada en AeroTrack Sentinel es una transacción verificable en la blockchain de Arkiv.** Los hashes de transacción se muestran en el dashboard y pueden verificarse en el [Block Explorer de Braga](https://explorer.braga.hoodi.arkiv.network) y el [Data Explorer](https://data.arkiv.network).
+
 ---
 
 ## Esquema de Datos en Arkiv

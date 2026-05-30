@@ -1,5 +1,5 @@
 import { Badge } from "@/components/ui/badge"
-import { Activity, Radio } from "lucide-react"
+import { Activity, Radio, ExternalLink } from "lucide-react"
 
 export function DashboardHeader() {
   return (
@@ -15,16 +15,27 @@ export function DashboardHeader() {
                 AeroTrack Sentinel
               </h1>
               <p className="text-xs text-zinc-500">
-                Dashboard de Auditor\u00eda Log\u00edstica con IA
+                Auditor\u00eda log\u00edstica con IA &middot; Datos verificables en Arkiv
               </p>
             </div>
           </div>
           <div className="flex items-center gap-2">
+            <a
+              href="https://data.arkiv.network"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs text-zinc-500 hover:text-cyan-400 flex items-center gap-1"
+            >
+              Data Explorer <ExternalLink className="h-3 w-3" />
+            </a>
             <Badge variant="outline" className="border-emerald-700 text-emerald-400 bg-emerald-950/50 gap-1.5">
               <Radio className="h-3 w-3" />
-              Arkiv Testnet
+              Braga Testnet
             </Badge>
           </div>
+        </div>
+        <div className="mt-3 p-3 bg-zinc-900/50 border border-zinc-800 rounded-lg text-xs text-zinc-400 leading-relaxed">
+          <strong className="text-zinc-300">\u00bfQu\u00e9 hace esta app?</strong> Cada vez que un modelo de IA sugiere una ruta log\u00edstica, AeroTrack registra esa decisi\u00f3n <strong className="text-cyan-400">inmutablemente</strong> en la blockchain de Arkiv. Nadie puede alterar o eliminar un registro a escondidas &mdash; cada decisi\u00f3n es verificable p\u00fablicamente. Los n\u00fameros de transacci\u00f3n que ves en la tabla son la prueba: hac clic en el \u00edcono de enlace para verificar en el explorador de bloques.
         </div>
       </div>
     </header>
