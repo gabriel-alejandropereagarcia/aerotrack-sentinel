@@ -1,0 +1,17 @@
+const crypto = require("crypto")
+
+const privateKey = "0x" + crypto.randomBytes(32).toString("hex")
+
+console.log("=== Nueva Wallet generada para AeroTrack Sentinel ===")
+console.log("")
+console.log("PRIVATE_KEY=" + privateKey)
+console.log("")
+console.log("Pasos:")
+console.log("1. Copiá la línea de arriba y pegala en tu archivo .env.local")
+console.log("2. Después ejecutá: node scripts/check-wallet.js")
+console.log("   Eso te va a dar la dirección pública")
+console.log("3. Pegá esa dirección en el faucet:")
+console.log("   https://braga.hoodi.arkiv.network/faucet/")
+console.log("")
+console.log("IMPORTANTE: Esta clave controla todos los datos de tu proyecto.")
+console.log("NUNCA la compartas ni la commitees en git.")

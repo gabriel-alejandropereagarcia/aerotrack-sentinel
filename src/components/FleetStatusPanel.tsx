@@ -1,0 +1,154 @@
+"use client"
+
+import { useState } from "react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { MapPin, Truck, ExternalLink } from "lucide-react"
+import { useUpdateFleetStatus } from "@/hooks/useArkivData"
+import type { FleetProfile } from "@/types"
+
+const STATUS_MAP: Record<number, { label: string; variant: "default" | "secondary" | "destructive" | "outline" }> = {
+  0: { label: "Inactivo", variant: "secondary" },
+  1: { label: "Operativo", variant: "default" },
+  2: { label: "En Mantenci\u00f3n", variant: "outline" },
+  3: { label: "Emergencia", variant: "destructive" },
+}
+
+const STATUS_OPTIONS = [
+  { value: 0, label: "Inactivo" },
+  { value: 1, label: "Operativo" },
+  { value: 2, label: "En Mantenci\u00f3n" },
+  { value: 3, label: "Emergencia" },
+]
+
+function shortenAddress(addr: string | undefined): string {
+  if (!addr) return "—"
+  return `${addr.slice(0, 6)}...${addr.slice(-4)}`
+}
+
+interface FleetStatusPanelProps {
+  fleets: FleetProfile[]
+  isLoading: boolean
+  selectedFleetId: string | null
+  onSelectFleet: (fleetId: string | null) => void
+}
+
+export function FleetStatusPanel({ fleets, isLoading, selectedFleetId, onSelectFleet }: FleetStatusPanelProps) {
+  const updateStatus = useUpdateFleetStatus()
+  const [updatingKey, setUpdatingKey] = useState<string | null>(null)
+
+  const handleStatusChange = (fleet: FleetProfile, newStatus: number) => {
+    setUpdatingKey(fleet.arkivEntityKey)
+    updateStatus.mutate(
+      {
+        entityKey: fleet.arkivEntityKey,
+        operationalStatus: newStatus,
+        payload: fleet.payload,
+        fleetId: fleet.fleetId,
+      },
+      {
+        onSettled: () => setUpdatingKey(null),
+      }
+    )
+  }
+
+  if (isLoading) {
+    return (
+      <div className="space-y-3">
+        {Array.from({ length: 3 }).map((_, i) => (
+          <Card key={i} className="bg-zinc-900 border-zinc-800 animate-pulse">
+            <CardContent className="p-4">
+              <div className="h-4 bg-zinc-700 rounded w-3/4 mb-2" />
+              <div className="h-3 bg-zinc-700 rounded w-1/2" />
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    )
+  }
+
+  if (fleets.length === 0) {
+    return (
+      <Card className="bg-zinc-900 border-zinc-800">
+        <CardContent className="p-6 text-center text-zinc-500">
+          No hay flotas registradas. Carg\u00e1 datos de prueba para comenzar.
+        </CardContent>
+      </Card>
+    )
+  }
+
+  return (
+    <div className="space-y-3">
+      {fleets.map((fleet) => {
+        const status = STATUS_MAP[fleet.operationalStatus] ?? { label: "Desconocido", variant: "outline" as const }
+        const isSelected = selectedFleetId === fleet.fleetId
+        const isUpdating = updatingKey === fleet.arkivEntityKey
+        const explorerUrl = `https://data.arkiv.network/${fleet.arkivEntityKey}`
+
+        return (
+          <Card
+            key={fleet.arkivEntityKey}
+            className={`cursor-pointer transition-all duration-200 ${
+              isSelected
+                ? "bg-zinc-800 border-cyan-500/70 ring-1 ring-cyan-500/30"
+                : "bg-zinc-900 border-zinc-800 hover:border-zinc-600"
+            }`}
+            onClick={() => onSelectFleet(isSelected ? null : fleet.fleetId)}
+          >
+            <CardHeader className="pb-2 pt-4 px-4">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-sm font-mono text-zinc-100">{fleet.fleetId}</CardTitle>
+                <div className="flex items-center gap-1.5">
+                  <Badge variant={status.variant}>{status.label}</Badge>
+                  <a
+                    href={explorerUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="text-zinc-500 hover:text-cyan-400 transition-colors"
+                    title="Ver en Data Explorer"
+                  >
+                    <ExternalLink className="h-3 w-3" />
+                  </a>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="px-4 pb-4">
+              <div className="flex items-center gap-2 text-xs text-zinc-400">
+                <MapPin className="h-3 w-3" />
+                <span>{fleet.payload.mainRoute}</span>
+              </div>
+              <div className="flex items-center gap-2 text-xs text-zinc-400 mt-1">
+                <Truck className="h-3 w-3" />
+                <span>{fleet.payload.vehicleType}</span>
+              </div>
+              {fleet.creator && (
+                <div className="text-[10px] text-zinc-600 mt-2 font-mono" title={fleet.creator}>
+                  Creado por: {shortenAddress(fleet.creator)}
+                </div>
+              )}
+              <div className="mt-2 flex gap-1">
+                {STATUS_OPTIONS.filter((o) => o.value !== fleet.operationalStatus).map((opt) => (
+                  <Button
+                    key={opt.value}
+                    size="sm"
+                    variant="ghost"
+                    className="h-5 text-[10px] px-1.5 text-zinc-500 hover:text-zinc-300"
+                    disabled={isUpdating}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handleStatusChange(fleet, opt.value)
+                    }}
+                  >
+                    {opt.label}
+                  </Button>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )
+      })}
+    </div>
+  )
+}

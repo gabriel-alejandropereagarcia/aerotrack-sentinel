@@ -1,0 +1,162 @@
+"use client"
+
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+import { Badge } from "@/components/ui/badge"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { AlertTriangle, Shield, Clock, ExternalLink } from "lucide-react"
+import type { RoutingDecision } from "@/types"
+
+function formatTimestamp(ms: number): string {
+  return new Date(ms).toLocaleString("es-AR", {
+    day: "2-digit",
+    month: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  })
+}
+
+function shortenAddress(addr: string | undefined): string {
+  if (!addr) return "—"
+  return `${addr.slice(0, 6)}...${addr.slice(-4)}`
+}
+
+function RiskBadge({ score }: { score: number }) {
+  if (score >= 8) {
+    return (
+      <Badge variant="destructive" className="gap-1">
+        <AlertTriangle className="h-3 w-3" />
+        {score}/10
+      </Badge>
+    )
+  }
+  if (score >= 5) {
+    return (
+      <Badge className="bg-amber-600 text-white gap-1">
+        <Shield className="h-3 w-3" />
+        {score}/10
+      </Badge>
+    )
+  }
+  return (
+    <Badge variant="secondary" className="gap-1">
+      {score}/10
+    </Badge>
+  )
+}
+
+interface RiskDecisionsTableProps {
+  decisions: RoutingDecision[]
+  isLoading: boolean
+}
+
+export function RiskDecisionsTable({ decisions, isLoading }: RiskDecisionsTableProps) {
+  if (isLoading) {
+    return (
+      <Card className="bg-zinc-900 border-zinc-800">
+        <CardHeader>
+          <CardTitle className="text-zinc-100">Decisiones de Ruta</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="h-12 bg-zinc-800 rounded animate-pulse" />
+          ))}
+        </CardContent>
+      </Card>
+    )
+  }
+
+  if (decisions.length === 0) {
+    return (
+      <Card className="bg-zinc-900 border-zinc-800">
+        <CardHeader>
+          <CardTitle className="text-zinc-100">Decisiones de Ruta</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="text-center py-12 text-zinc-500">
+            <Shield className="h-12 w-12 mx-auto mb-3 text-zinc-700" />
+            <p className="text-sm">Sin decisiones registradas.</p>
+            <p className="text-xs mt-1">Us\u00e1 &quot;Simular IA&quot; para generar datos de prueba.</p>
+          </div>
+        </CardContent>
+      </Card>
+    )
+  }
+
+  return (
+    <Card className="bg-zinc-900 border-zinc-800">
+      <CardHeader>
+        <div className="flex items-center justify-between">
+          <CardTitle className="text-zinc-100 flex items-center gap-2">
+            <AlertTriangle className="h-5 w-5 text-amber-500" />
+            Decisiones de Ruta
+          </CardTitle>
+          <Badge variant="outline" className="text-zinc-400 border-zinc-700">
+            {decisions.length} registros
+          </Badge>
+        </div>
+      </CardHeader>
+      <CardContent>
+        <div className="overflow-x-auto">
+          <Table>
+            <TableHeader>
+              <TableRow className="border-zinc-800 hover:bg-transparent">
+                <TableHead className="text-zinc-400">Flota</TableHead>
+                <TableHead className="text-zinc-400">Riesgo</TableHead>
+                <TableHead className="text-zinc-400">Justificaci\u00f3n IA</TableHead>
+                <TableHead className="text-zinc-400">Modelo</TableHead>
+                <TableHead className="text-zinc-400 text-right">
+                  <Clock className="h-3 w-3 inline" /> Fecha
+                </TableHead>
+                <TableHead className="text-zinc-400 w-10"></TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {decisions.map((d) => (
+                <TableRow key={d.arkivEntityKey} className="border-zinc-800/50 hover:bg-zinc-800/50">
+                  <TableCell className="font-mono text-sm text-cyan-400">
+                    {d.fleetId}
+                  </TableCell>
+                  <TableCell>
+                    <RiskBadge score={d.riskScore} />
+                  </TableCell>
+                  <TableCell className="max-w-[300px] text-sm text-zinc-300 truncate">
+                    {d.payload.aiJustification}
+                  </TableCell>
+                  <TableCell className="text-xs text-zinc-500">
+                    {d.payload.model}
+                  </TableCell>
+                  <TableCell className="text-xs text-zinc-500 text-right">
+                    {formatTimestamp(d.createdAt)}
+                  </TableCell>
+                  <TableCell>
+                    <a
+                      href={`https://data.arkiv.network/${d.arkivEntityKey}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-zinc-500 hover:text-cyan-400 transition-colors inline-flex"
+                      title="Ver en Data Explorer"
+                    >
+                      <ExternalLink className="h-3 w-3" />
+                    </a>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+        {decisions[0]?.creator && (
+          <div className="mt-3 text-[10px] text-zinc-600 font-mono">
+            Datos verificados &middot; Creador: {shortenAddress(decisions[0].creator)}
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  )
+}
