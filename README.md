@@ -87,7 +87,7 @@ Cumplimiento de la rúbrica de integración Arkiv (40% del puntaje):
 
 ```bash
 # 1. Clonar
-git clone https://github.com/<tu-repo>/aerotrack-sentinel.git
+git clone https://github.com/gabriel-alejandropereagarcia/aerotrack-sentinel.git
 cd aerotrack-sentinel
 
 # 2. Instalar dependencias
