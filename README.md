@@ -10,6 +10,49 @@ Proyecto para el **Hackathon ARKIV × PunaTech 2026**.
 
 ---
 
+## Transacciones Verificables
+
+La app está desplegada y conectada al testnet de Arkiv Braga. Cada acción genera transacciones reales que pueden verificarse en el Block Explorer haciendo click en los links a continuación:
+
+### Batch: Creación de flotas (3 fleet_profile en una transacción)
+
+| Entidad | entityKey | Ver en Explorer |
+|---------|-----------|-----------------|
+| flota-norte-01 | `0x6e76...1f7` | [Ver tx](https://explorer.braga.hoodi.arkiv.network/tx/0x504616d2ebdf07825563c8cc68b042e4e4212ef795208a52ac99a5f867fbbb89) |
+| flota-sur-02 | `0xc08c...984` | [Ver tx](https://explorer.braga.hoodi.arkiv.network/tx/0x504616d2ebdf07825563c8cc68b042e4e4212ef795208a52ac99a5f867fbbb89) |
+| flota-centro-03 | `0x98d6...ee2` | [Ver tx](https://explorer.braga.hoodi.arkiv.network/tx/0x504616d2ebdf07825563c8cc68b042e4e4212ef795208a52ac99a5f867fbbb89) |
+
+**txHash:** [`0x5046...bb89`](https://explorer.braga.hoodi.arkiv.network/tx/0x504616d2ebdf07825563c8cc68b042e4e4212ef795208a52ac99a5f867fbbb89)
+
+### Batch: Creación de decisiones de ruta (8 routing_decision en una transacción)
+
+| Entidad | riskScore | fleetId | entityKey |
+|---------|-----------|---------|-----------|
+| Decisión 1 | 8 | flota-norte-01 | `0xd656...ec3` |
+| Decisión 2 | 3 | flota-norte-01 | `0xdc36...a8e` |
+| Decisión 3 | 7 | flota-sur-02 | `0xc6b7...527` |
+| Decisión 4 | 9 | flota-sur-02 | `0x0271...7ad` |
+| Decisión 5 | 2 | flota-centro-03 | `0x84fc...902` |
+| Decisión 6 | 6 | flota-norte-01 | `0x0872...d16` |
+| Decisión 7 | 4 | flota-sur-02 | `0x4b10...0c7` |
+| Decisión 8 | 10 | flota-centro-03 | `0xbc2e...c6e` |
+
+**txHash:** [`0x2136...ff4e`](https://explorer.braga.hoodi.arkiv.network/tx/0x213602d56c761171952bd231df2dda0abcccb8cb14b74be8d721dbabed2eff4e)
+
+### Simulación IA: Decisión individual generada en tiempo real
+
+| Campo | Valor |
+|-------|-------|
+| fleetId | `flota-centro-03` |
+| riskScore | 8 |
+| aiJustification | "Protestas bloqueando Ruta 3. Desvío obligatorio por Ruta Alternativa." |
+| entityKey | `0xa952...e9b0` |
+| **txHash** | [`0xe147...3b0e`](https://explorer.braga.hoodi.arkiv.network/tx/0xe14712f2e0810d3b1691bc5b56dc24b171b9579d942d871bd7eb9ca991073b0e) |
+
+> Para generar nuevas transacciones verificables en tiempo real, visitá la [demo](https://aerotrack-sentinel.vercel.app) y hacé click en "Simular IA" o "Cargar datos de prueba". Cada acción produce un txHash que se muestra en el dashboard con link directo al Block Explorer.
+
+---
+
 ## Por qué existe AeroTrack Sentinel
 
 Cuando una IA logística decide desviar una flota por nieve, accidente o protestas, se genera una **decisión operativa crítica**. Hoy ese registro vive en una base de datos centralizada: cualquier administrador puede modificarlo, borrarlo, o reinterpretarlo. No hay forma criptográfica de probar **quién** tomó la decisión, **cuándo**, ni **qué justificación dio el modelo**. Si hay un incidente — camiones desviados a una ruta peligrosa — la auditoría es imposible porque la fuente de verdad es mutable.

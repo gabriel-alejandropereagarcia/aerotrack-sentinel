@@ -2,6 +2,13 @@
 
 > Hackathon ARKIV × PunaTech 2026
 
+**Demo funcional:** [aerotrack-sentinel.vercel.app](https://aerotrack-sentinel.vercel.app)
+
+**Transacciones verificables en Block Explorer:**
+- Batch flotas: [0x5046...bb89](https://explorer.braga.hoodi.arkiv.network/tx/0x504616d2ebdf07825563c8cc68b042e4e4212ef795208a52ac99a5f867fbbb89)
+- Batch decisiones: [0x2136...ff4e](https://explorer.braga.hoodi.arkiv.network/tx/0x213602d56c761171952bd231df2dda0abcccb8cb14b74be8d721dbabed2eff4e)
+- Simulación IA: [0xe147...3b0e](https://explorer.braga.hoodi.arkiv.network/tx/0xe14712f2e0810d3b1691bc5b56dc24b171b9579d942d871bd7eb9ca991073b0e)
+
 ---
 
 ## Slide 0 — Título (3s)
